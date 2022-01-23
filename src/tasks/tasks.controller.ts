@@ -10,14 +10,25 @@ import {
   Req, */
 } from '@nestjs/common';
 import { CreateTaskDto } from './dto/createTask.dto';
+import { TasksService } from './tasks.service';
+import { Task } from '../../dist/tasks/interfaces/task';
+
 /* import { Request, Response } from 'express'; */
 
 @Controller('tasks')
 export class TasksController {
+  constructor(private tasksService: TasksService) {}
+
   @Get()
-  getTasks(): { hello: string } {
-    return { hello: 'world' };
+  getTasks(): Task[] {
+    return this.tasksService.getTasks();
   }
+
+  @Get('/:taskId')
+  getTask(@Param('taskId') taskId: string) {
+    return this.tasksService.getTask(parseInt(taskId));
+  }
+
   /*
     Manera de hacerlo con Express
 
