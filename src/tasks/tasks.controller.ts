@@ -20,13 +20,13 @@ export class TasksController {
   constructor(private tasksService: TasksService) {}
 
   @Get()
-  getTasks(): Task[] {
+  getTasks(): Promise<Task[]> {
     return this.tasksService.getTasks();
   }
 
   @Get('/:taskId')
-  getTask(@Param('taskId') taskId: string) {
-    return this.tasksService.getTask(parseInt(taskId));
+  getTask(@Param('taskId') taskId: string): Promise<Task> {
+    return this.tasksService.getTask(taskId);
   }
 
   /*
@@ -38,8 +38,8 @@ export class TasksController {
   } */
 
   @Post()
-  createTask0(@Body() task: CreateTaskDto): string {
-    return 'creating a task';
+  createTask(@Body() task: CreateTaskDto) {
+    return this.tasksService.createTask(task);
   }
 
   @Put('/:id')

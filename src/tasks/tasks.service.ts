@@ -1,35 +1,26 @@
+import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { Task } from '../../dist/tasks/interfaces/task';
+import { InjectModel } from '@nestjs/mongoose';
 
+import { Task as TaskInterface } from '../../dist/tasks/interfaces/task';
+import { Task, taskDocument } from './schemas/tasks.schema';
+import { CreateTaskDto } from './dto/createTask.dto';
 /* Para especificar clases que no sean para transferir data, usamos interfaces */
 @Injectable()
 export class TasksService {
-  tasks: Task[] = [
-    {
-      title: 'testing',
-      description: 'testing description',
-      done: false,
-      _id: 1,
-    },
-    {
-      title: 'testing 2',
-      description: 'testing description 2',
-      done: false,
-      _id: 2,
-    },
-    {
-      title: 'testing 3',
-      description: 'testing description 3',
-      done: false,
-      _id: 3,
-    },
-  ];
+  constructor(@InjectModel(Task.name) private taskModel: Model<taskDocument>) {}
 
-  getTask(id: number): Task {
-    return this.tasks.find((task) => task._id === id);
+  async getTasks() {
+    return await this.taskModel.find();
   }
 
-  getTasks(): Task[] {
-    return this.tasks;
+  async getTask(id: string) {
+    return await this.taskModel.findById(id);
+  }
+
+  async createTask(task: CreateTaskDto) {
+    const newTask = new this.taskModel(task);
+
+    return newTask;
   }
 }
