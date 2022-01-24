@@ -3,6 +3,7 @@ import { Document } from 'mongoose';
 
 export type taskDocument = Task & Document;
 
+@Schema()
 export class Task {
   @Prop({ required: true })
   title: string;
